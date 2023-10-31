@@ -1,0 +1,28 @@
+make docker-build
+
+az login
+
+TOKEN=$(az acr login --name medstackcibaa9 --expose-token --output tsv --query accessToken)
+
+docker login medstackcibaa9.azurecr.io --username 00000000-0000-0000-0000-000000000000 --password-stdin <<< $TOKEN
+
+docker push medstackcibaa9.azurecr.io/pagerduty-slack-sync
+
+xoxp-4699950496-765368597651-6091584067556-06c0d7bb4b2971dae30524c50a28435c
+docker run -e RUN_INTERVAL_SECONDS=60 -e SLACK_TOKEN=xoxp-4699950496-518564943605-4251277258385-37b6a63f4749e0c8a55ba8212c8fe993 -e PAGERDUTY_TOKEN=u+bT4ArmptnCtbJ9XWfA -e SCHEDULE=PRMQ56G medstackcibaa9.azurecr.io/pagerduty-slack-sync:latest
+
+docker run -e RUN_INTERVAL_SECONDS=300 -e SLACK_TOKEN=xoxp-4699950496-765368597651-6091584067556-06c0d7bb4b2971dae30524c50a28435c -e SLACK_BOT_TOKEN=xoxb-4699950496-6112128486816-DckCJ99J2xiroqhsXEolLgLv -e PAGERDUTY_TOKEN=u+bT4ArmptnCtbJ9XWfA -e SCHEDULE_ON_CALL=PRMQ56G,on-call -e SCHEDULE_TRIAGE_ON_CALL=PP1XNWV,triage-on-call -e PAGERDUTY_SCHEDULE_FROM=0h medstackcibaa9.azurecr.io/pagerduty-slack-sync:latest
+
+
+
+ACR_NAME=medstackcibaa9
+SERVICE_PRINCIPAL_NAME=medstackcibaa9
+SUBSCRIPTION=aad13a2a-0ee0-4bd4-9ec7-c6c683137d77
+
+ACR_REGISTRY_ID=$(az acr show --name $ACR_NAME --subscription $SUBSCRIPTION --query "id" --output tsv)
+
+PASSWORD=$(az ad sp create-for-rbac --name $SERVICE_PRINCIPAL_NAME --scopes $ACR_REGISTRY_ID --role acrpull --query "password" --output tsv)
+USER_NAME=$(az ad sp list --display-name $SERVICE_PRINCIPAL_NAME --query "[].appId" --output tsv)
+
+echo "Service principal ID: $USER_NAME"
+echo "Service principal password: $PASSWORD"

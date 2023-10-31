@@ -20,8 +20,11 @@ check: lint vet
 test:
 	@go test -v ./...
 
+test-cover:
+	@go test -cover -coverprofile ./coverage.out -v ./...
+
 docker-build:
-	@docker build -t kevholditch/pagerduty-slack-sync:${TAG} -f build/package/Dockerfile .
+	@docker build -t medstackcibaa9.azurecr.io/pagerduty-slack-sync -f build/package/Dockerfile .
 
 docker-publish:
 	@docker login

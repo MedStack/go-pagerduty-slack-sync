@@ -16,10 +16,10 @@ func newPagerDutyClient(token string) *pagerDutyClient {
 	}
 }
 
-func (p *pagerDutyClient) getEmailsForSchedule(ID string, lookahead time.Duration) ([]string, error) {
+func (p *pagerDutyClient) getEmailsForSchedule(ID string, from time.Duration, to time.Duration) ([]string, error) {
 	users, err := p.client.ListOnCallUsers(ID, pagerduty.ListOnCallUsersOptions{
-		Since: time.Now().UTC().Format(time.RFC3339),
-		Until: time.Now().UTC().Add(lookahead).Format(time.RFC3339),
+		Since: time.Now().UTC().Add(from).Format(time.RFC3339),
+		Until: time.Now().UTC().Add(from).Add(to).Format(time.RFC3339),
 	})
 	if err != nil {
 		return nil, err

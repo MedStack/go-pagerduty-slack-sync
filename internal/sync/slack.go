@@ -33,7 +33,7 @@ func newSlackClient(token string) (*slackClient, error) {
 }
 
 func (s *slackClient) createOrGetUserGroup(name string) (*slack.UserGroup, error) {
-	group := s.findUserGroupByName(name)
+	group := s.findUserGroupByHandle(name)
 	if group != nil {
 		return group, nil
 	}
@@ -69,12 +69,19 @@ func (s *slackClient) findUserIDByEmail(email string) *string {
 	}
 	return nil
 }
-
-func (s *slackClient) findUserGroupByName(name string) *slack.UserGroup {
+func (s *slackClient) findUserGroupByHandle(handle string) *slack.UserGroup {
 	for _, g := range s.userGroups {
-		if strings.EqualFold(name, g.Name) {
+		if strings.EqualFold(handle, g.Handle) {
 			return &g
 		}
+	}
+	return nil
+}
+
+func (s *slackClient) postMessage(channel string, user string, group string) error {
+	_, _, err := s.Client.PostMessage(channel, slack.MsgOptionAsUser(false), slack.MsgOptionText(fmt.Sprintf("<@%s> is now <!subteam^%s>", user, group), false), slack.MsgOptionUsername(group), slack.MsgOptionIconEmoji(":slack_call:"))
+	if err != nil {
+		return err
 	}
 	return nil
 }

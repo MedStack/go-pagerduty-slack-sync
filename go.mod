@@ -1,9 +1,10 @@
-module github.com/kevholditch/go-pagerduty-slack-sync
+module github.com/medstack/go-pagerduty-slack-sync
 
 go 1.15
 
 require (
 	github.com/PagerDuty/go-pagerduty v1.3.0
+	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.4.2
 	github.com/slack-go/slack v0.7.2

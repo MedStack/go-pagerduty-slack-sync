@@ -23,7 +23,7 @@ func Test_Array(t *testing.T) {
 		t.Run(fmt.Sprintf("array case %d", i), func(t *testing.T) {
 			result := Array(c.a1, c.a2)
 			if c.result != result {
-				t.Errorf("exptected a1: %v compared to a2: %v to be: %v but was :%v", c.a1, c.a2, c.result, result)
+				t.Errorf("expected a1: %v compared to a2: %v to be: %v but was :%v", c.a1, c.a2, c.result, result)
 			}
 		})
 	}
